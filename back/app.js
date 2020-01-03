@@ -9,6 +9,7 @@ const logger = require('koa-logger')
 const index = require('./routes/index')
 const users = require('./routes/users')
 
+global.dirName = __dirname
 // error handler
 onerror(app)
 

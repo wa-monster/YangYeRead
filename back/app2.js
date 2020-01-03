@@ -14,10 +14,14 @@ let req = https.get(url1, function (res) {
   res.on('end', function (chunl) {
     console.log('完成')
     let data = Buffer.concat(chunks)
-    console.log(data)
+    
     zlib.gunzip(data, function (err, decoded) {
       console.log(decoded)
-      console.log(decoded.toString())
+      if (!decoded){
+        console.log(data.toString())
+      }else{
+        console.log(decoded.toString())
+      }
     })
 
   })
