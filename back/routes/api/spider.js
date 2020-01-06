@@ -43,7 +43,6 @@ function spider (){
     let req = https.get(url1, function (res) {
       let chunks = []
       res.on('data', function (chunk) {
-        console.log(chunk)
         chunks.push(chunk)
       })
       res.on('end', function (chunk) {
