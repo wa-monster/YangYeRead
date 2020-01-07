@@ -8,18 +8,16 @@ const path = require('path')
 
 //判断是否存在文件或目录
 const isFileOrDir = (dirname = '/index.html') => {
-  console.log('判断',dirname)
   return new Promise((resolve, reject) => {
     fs.stat(dirname, (error, stats) => {
       if (error) {
-        console.log('判断失败')
         resolve(false)
-        console.log(error)
+        console.log('判断失败，递归向上')
         return
       } else {
         console.log('判断成功')
         resolve(true)
-        console.log('文件：' + stats.isFile())
+        // console.log('文件：' + stats.isFile())
         // console.log('目录:' + stats.isDirectory())
       }
     })
