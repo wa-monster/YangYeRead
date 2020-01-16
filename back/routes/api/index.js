@@ -12,8 +12,9 @@ router.get('/da', async (ctx, next)=>{
     url:'33333'
   }
 })
-router.get('/serach', async(ctx, next)=>{
-  let html = await spider()
+router.get('/home', async(ctx, next)=>{
+  let url = "https://m.biquge.com.cn/"
+  let html = await spider(url)
   // console.log(html.length)
   let $ = cheerio.load(html)
   let blockList = $('.article .block')
@@ -25,6 +26,20 @@ router.get('/serach', async(ctx, next)=>{
   // let info = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/index.html'))
   console.log(ListHtml)
   ctx.body = ListHtml
+})
+
+router.get('/search', async(ctx, next)=>{
+  let { key } = ctx.query
+  let url = `https://m.biquge.com.cn/search.phpq=${key}`
+  let html = await spider(url)
+  //cheerio
+  let $ = cheerio.load(html)
+  let resultList = $('body')
+  let ListHtml = [] 
+  //写入
+  let info = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/search.html'))
+  console.log(info)
+  ctx.body = $(resultList).html()
 })
 
 

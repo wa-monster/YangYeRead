@@ -1,5 +1,8 @@
 <template>
 	<view class="content">
+		<view class="search-box">
+			<input type="text" v-model="searchKey" placeholder="输入关键词"><span class="btn-search" @click="search">搜索</span>
+		</view>
 		<div :key="index" v-for="(item,index) in pageData" v-html="item" class="block" >
 		</div>
 
@@ -13,18 +16,19 @@
 					title: 'Hello',
 					baseUrl:'http://localhost:3000',
 					pageData:[],
-					url:"window.location='/search.php?q='+encodeURI($('#keyword').val());"
+					url:"window.location='/search.php?q='+encodeURI($('#keyword').val());",
+					searchKey:'',
 				}
 			},
 			async onLoad() {
-				await this.loadData()
+				// await this.loadData()
 				console.log(this.pageData)
 			},
 			methods: {
 				loadData(){
 					return new Promise((resolve,reject)=>{
 						uni.request({
-							url:this.baseUrl+'/api/serach',
+							url:this.baseUrl+'/api/home',
 							method:'GET',
 							success:(res)=>{
 								console.log(res)
@@ -37,14 +41,25 @@
 							}
 						})
 					})
-					
+				},
+				search(){
+					if(this.searchKey !== ''){
+						uni.navigateTo({
+							url:`/pages/search/index?key=${this.searchKey}`,
+						})
+					}
 				}
 			}
 		}
 	</script>
 	
 	<style lang="scss">
-		
+		.search-box{
+			border: 1px  solid #C0C0C0;
+			width: 90%;
+			margin: 10px 5%;
+			overflow: hidden;
+		}
 		.block{
 			display: flex;
 			// justify-content: center;

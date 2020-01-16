@@ -5,6 +5,12 @@
 			"style": {
 				"navigationBarTitleText": "羊羊羊"
 			}
+		},
+		{
+			"path": "pages/search/index",
+			"style": {
+				"navigationBarTitleText": "羊羊羊"
+			}
 		}
 	],
 	"globalStyle": {
