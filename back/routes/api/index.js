@@ -6,20 +6,25 @@ const path = require('path')
 const cheerio = require('cheerio')
 
 
-router.get('/a', async (ctx, next)=>{
-  ctx.body="sdasdasdas"
+router.get('/da', async (ctx, next)=>{
+  ctx.body={
+    name:'123',
+    url:'33333'
+  }
 })
 router.get('/serach', async(ctx, next)=>{
   let html = await spider()
-  console.log(html.length)
+  // console.log(html.length)
   let $ = cheerio.load(html)
-  let aList = $('.nav a')
-  aList.each(function(index,item){
+  let blockList = $('.article .block')
+  let ListHtml = [] 
+  blockList.each(function(index,item){
     console.log($(item).text())
+    ListHtml.push($(item).html())
   })
   // let info = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/index.html'))
-  // console.log(info)
-  ctx.body = '123'
+  console.log(ListHtml)
+  ctx.body = ListHtml
 })
 
 

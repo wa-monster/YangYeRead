@@ -74,3 +74,6 @@ const writeFileFn = async (htmlStr,dirname='/index.html') => {
 }
 
 module.exports = writeFileFn
+
+//用法
+//let a = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/index.html'))

@@ -3,7 +3,7 @@ const cheerio = require('cheerio')
 const zlib = require('zlib')
 const router = require('koa-router')()
 
-let url1 = "https://www.biquge.com.cn/"
+let url1 = "https://m.biquge.com.cn/"
 
 
 router.get('/spider',async (ctx)=>{

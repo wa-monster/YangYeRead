@@ -8,7 +8,9 @@ const logger = require('koa-logger')
 
 const index = require('./routes/index')
 const users = require('./routes/users')
-
+const cors = require('koa2-cors');
+//允许跨域
+app.use(cors());
 global.dirName = __dirname
 // error handler
 onerror(app)
