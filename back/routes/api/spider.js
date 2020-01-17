@@ -1,8 +1,25 @@
 const https = require('https')
 const zlib = require('zlib')
-const iconv = require('icon');
+const iconv = require('iconv-lite')
+const regular = require('../../util/regular.js')
+const cheerio = require('cheerio')
+
+//正则验证
+function changeCodeFormat(data){
+  $ = cheerio.load(data)
+  let meta = $('meta')
+  let htmlStr = data
+  //检查编码格式
+  let codeFormat = regular.codeRegular(meta.toString())
+  if (codeFormat) {
+    htmlStr = iconv.decode(data, codeFormat[1])
+  }
+  return htmlStr
+}
 
 
+
+//爬虫
 function spider(spiderUrl){
   return new Promise((resolve,reject)=>{
     let str
@@ -16,12 +33,14 @@ function spider(spiderUrl){
         let data = Buffer.concat(chunks)
         //解压缩
         zlib.gunzip(data, function (err, decoded) {
+          // if(err){
+          //   reject(err)
+          // }
           if (!decoded) {
-            str = data.toString()
-
+            str = changeCodeFormat(data).toString()
             resolve(str)
           } else {
-            str = decoded.toString()
+            str = changeCodeFormat(decoded).toString()
             resolve(str)
           }
         })

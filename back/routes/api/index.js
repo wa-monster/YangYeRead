@@ -12,6 +12,7 @@ router.get('/da', async (ctx, next)=>{
     url:'33333'
   }
 })
+//首页
 router.get('/home', async(ctx, next)=>{
   let url = "https://m.biquge.com.cn/"
   let html = await spider(url)
@@ -20,21 +21,22 @@ router.get('/home', async(ctx, next)=>{
   let blockList = $('.article .block')
   let ListHtml = [] 
   blockList.each(function(index,item){
-    console.log($(item).text())
     ListHtml.push($(item).html())
   })
   // let info = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/index.html'))
-  console.log(ListHtml)
   ctx.body = ListHtml
 })
 
+//搜索
 router.get('/search', async(ctx, next)=>{
   let { key } = ctx.query
-  let url = `https://m.biquge.com.cn/search.phpq=${key}`
+  let url = `https://m.biquge.com.cn/search.php?q=${key}`
   let html = await spider(url)
   //cheerio
   let $ = cheerio.load(html)
+  $('.search').remove()
   let resultList = $('body')
+  
   let ListHtml = [] 
   //写入
   let info = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/search.html'))
