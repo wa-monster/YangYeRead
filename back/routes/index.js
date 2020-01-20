@@ -14,7 +14,6 @@ router.post('/da', async (ctx, next) => {
 })
 
 
-
-router.use('/api', require('./api').routes())
+router.use('/api', require('./api/index').routes())
 
 module.exports = router

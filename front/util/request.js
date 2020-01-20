@@ -1,7 +1,7 @@
 
 
 
-export const req = function(options){
+export const xhr = function(options){
 	return new Promise((resolve,reject)=>{
 		options = Object.assign({},{url:'',method:''},options)
 		uni.request({

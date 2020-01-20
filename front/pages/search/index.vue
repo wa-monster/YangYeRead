@@ -20,7 +20,6 @@
 </template>
 
 <script>
-	import {req} from '../../util/request.js'
 	import uniPagination from '@dcloudio/uni-ui/lib/uni-pagination/uni-pagination.vue'
 	
 	export default {
@@ -28,7 +27,6 @@
 		data(){
 			return {
 				key:'',
-				baseUrl:'http://localhost:3000/api',
 				serachData:'',
 				currentPage:1,
 				total:0
@@ -43,8 +41,8 @@
 		methods:{
 			searchData(params){
 				return new Promise((resolve,reject)=>{
-					req({
-						url:`${this.baseUrl}/search`,
+					xhr({
+						url:`${baseUrl}/search`,
 						method:"get",
 						data:{
 							key:this.key,
@@ -74,8 +72,10 @@
 		& /deep/  .result-list{
 			.result-game-item-pic-link-img{
 				visibility: hidden;
+				margin: 10px ;
 			}
 			.result-game-item-detail{
+				margin: 10px ;
 				color: rgba(0,0,0,0);
 				h2,span,a{
 					color: rgba(0,0,0,0);

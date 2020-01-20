@@ -3,19 +3,39 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "羊羊羊"
+				"navigationBarTitleText": "首页"
 			}
 		},
 		{
 			"path": "pages/search/index",
 			"style": {
-				"navigationBarTitleText": "羊羊羊"
+				// "navigationBarTitleText": "杨阳阳的小说搜索结果"
+				"navigationBarTitleText": "搜索"
+			}
+		},
+		{
+			"path": "pages/catalog/index",
+			"style": {
+				"navigationBarTitleText": "目录"
+			}
+		},
+		{
+			"path": "pages/brief/index",
+			"style": {
+				"navigationBarTitleText": "简介"
+			}
+		},
+		{
+			"path": "pages/look/index",
+			"style": {
+				"navigationBarTitleText": "看"
 			}
 		}
+		
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "羊羊羊",
+		"navigationBarTitleText": "嘴遁-恰饭",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	}
