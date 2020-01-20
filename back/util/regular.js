@@ -6,5 +6,4 @@ const codeRegular = function(str){
 
 module.exports = {
   codeRegular,
-  
 }

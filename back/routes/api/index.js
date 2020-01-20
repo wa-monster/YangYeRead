@@ -29,19 +29,32 @@ router.get('/home', async(ctx, next)=>{
 
 //搜索
 router.get('/search', async(ctx, next)=>{
-  let { key } = ctx.query
-  let url = `https://m.biquge.com.cn/search.php?q=${key}`
+  let { key, page } = ctx.query
+  console.log(ctx.query)
+  let url = `https://m.biquge.com.cn/search.php?q=${key}&p=${page}`
+  
   let html = await spider(url)
   //cheerio
   let $ = cheerio.load(html)
+
+  let mainText = $('.search-result-page-main').text()
+  let elementTotal = mainText.split('总共')[1]
+  elementTotal = elementTotal.match(/\d+/g)
+
+  //去除搜索
   $('.search').remove()
+  //去除分页
+  
+  $('.search-result-page').remove()
   let resultList = $('body')
   
   let ListHtml = [] 
   //写入
-  let info = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/search.html'))
-  console.log(info)
-  ctx.body = $(resultList).html()
+  // let info = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/search.html'))
+  ctx.body = {
+    html:$(resultList).html(),
+    total: Number(elementTotal)*10
+  }
 })
 
 

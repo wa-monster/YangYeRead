@@ -17,13 +17,11 @@ function changeCodeFormat(data){
   return htmlStr
 }
 
-
-
 //爬虫
 function spider(spiderUrl){
   return new Promise((resolve,reject)=>{
     let str
-    let req = https.get(spiderUrl, function (res) {
+    let req = https.get(encodeURI(spiderUrl), function (res) {
       let chunks = []
       res.on('data', function (chunk) {
         chunks.push(chunk)
