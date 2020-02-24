@@ -4,6 +4,9 @@ const writeFileFn = require('../../util/mkdir')
 const path = require('path')
 const cheerio = require('cheerio')
 
+
+
+const { indexData, searchData, briefData, contentData } = require('../../control')
 const url = "https://m.biquge.com.cn"
 
 router.get('/da', async (ctx, next)=>{
@@ -18,64 +21,77 @@ router.get('/home', async(ctx, next)=>{
   let html = await spider(url)
   // console.log(html.length)
   let $ = cheerio.load(html)
+  let ListData = indexData($)
 
-  $('a').each(function(index,item){
-    let href = $(item).attr('href')
-    let i = href.lastIndexOf("\/");
-    let code = href.substring(i + 1, href.length)
-    $(item).attr('href', `/pages/brief/index?id=${code}`)
-  })
-  
-  let ListHtml = [] 
-  $('.article .block').each(function(index,item){
-    
-    ListHtml.push($(item).html())
-  })
   // let info = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/index.html'))
-  ctx.body = ListHtml
+  ctx.body = ListData
 })
 
 //搜索
 router.get('/search', async(ctx, next)=>{
   let { key, page } = ctx.query
-  console.log(ctx.query)
   let url = `https://m.biquge.com.cn/search.php?q=${key}&p=${page}`
   
   let html = await spider(url)
   //cheerio
   let $ = cheerio.load(html)
-  $('a').each(function (index, item) {
-    let href = $(item).attr('href')
-    href = href.substring(0, href.length-1)
-    let i = href.lastIndexOf("\/");
-    let code = href.substring(i + 1, href.length)
-    $(item).attr('href', `/pages/brief/index?id=${code}`)
-  })
-  let mainText = $('.search-result-page-main').text()
-  let elementTotal = mainText.split('总共')[1]
-  elementTotal = elementTotal.match(/\d+/g)
-
-  //去除搜索
-  $('.search').remove()
-  //去除分页
-  
-  $('.search-result-page').remove()
-  let resultList = $('body')
-  
-  let ListHtml = [] 
+  let data =  searchData($)
   //写入
-  let info = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/search.html'))
-  ctx.body = {
-    html:$(resultList).html(),
-    total: Number(elementTotal)*10
-  }
+  // let info = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/search.html'))
+  ctx.body = data 
 })
+
+
+//简介和目录
+let contorlBrief = async (ctx, next) => {
+  let { bookId ,catlog } = ctx.params
+  let html
+  if(catlog !== false){
+    html = await spider(`${url}/book/${bookId}/${catlog}`)
+  }else{
+    html = await spider(`${url}/book/${bookId}/`)
+  }
+  let $ = cheerio.load(html)
+  let body = briefData($)
+
+  // chapter.attr('style','display:block')
+
+  // let info = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/index.html'))
+  ctx.body = body 
+
+}
+
+//内容
+let contorlCatlog = async (ctx, next) => {
+  let { bookId ,catlog } = ctx.params
+
+  let html = await spider(`${url}/book/${bookId}/${catlog}`)
+  let $ = cheerio.load(html)
+  let body = contentData($)
+  let info = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/index.html'))
+  ctx.body = body
+}
+//简介,目录和内容
+let isCatlogOrBrief  = (ctx, next)=>{
+  let { catlog } = ctx.params
+  if(catlog){
+    if(catlog.indexOf('index') !== -1){
+      //目录
+      return contorlBrief(ctx, next)
+    }else{
+      //内容
+      return contorlCatlog(ctx, next)
+    }
+  }else{
+    //简介
+    return contorlBrief(ctx, next)
+  }
+}
+
 //简介
-router.get('/book/:bookId', async (ctx, next) => {
-  let { bookId } = ctx.params
-  ctx.body = {
-    b: ctx.params
-  }
-})
+router.get('/book/:bookId', isCatlogOrBrief)
+
+//目录和内容
+router.get('/book/:bookId/:catlog', isCatlogOrBrief)
 
 module.exports = router

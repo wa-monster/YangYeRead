@@ -13,12 +13,12 @@
 				"navigationBarTitleText": "搜索"
 			}
 		},
-		{
-			"path": "pages/catalog/index",
-			"style": {
-				"navigationBarTitleText": "目录"
-			}
-		},
+		// {
+		// 	"path": "pages/catalog/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "目录"
+		// 	}
+		// },
 		{
 			"path": "pages/brief/index",
 			"style": {
@@ -28,14 +28,15 @@
 		{
 			"path": "pages/look/index",
 			"style": {
-				"navigationBarTitleText": "看"
+				"navigationBarTitleText": "内容",
+				 "app-plus": {"titleNView": false} 
 			}
 		}
 		
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "嘴遁-恰饭",
+		"navigationBarTitleText": "内容",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	}
