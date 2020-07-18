@@ -59,6 +59,10 @@
 							resolve()
 						},
 						fail:(err)=>{
+							uni.showToast({
+							    title: '请求出错',
+							    duration: 2000
+							});
 							reject(err)
 						}
 					})

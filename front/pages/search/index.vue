@@ -91,6 +91,10 @@
 						console.log(res.data.html)
 						resolve(res)
 					}).catch(err=>{
+						uni.showToast({
+						    title: '请求出错',
+						    duration: 2000
+						});
 						reject(err)
 						throw err
 					})
@@ -134,11 +138,16 @@
 					line-height: 1rem;
 					font-weight: bold;
 					font-size: 1rem;
-					margin-bottom: 10px;
 				}
 			}
 		}
 		
+	}
+	.result-game-item-desc{
+		font-size: .7rem;
+	}
+	.result-game-item-info{
+		font-size: .7rem;
 	}
 	.search-result-page{
 		padding: 40px 18px;

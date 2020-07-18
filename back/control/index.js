@@ -1,6 +1,5 @@
 let {resolveImg,} = require('../util/base')
-
-
+let Catlog =  require('../util/catlog')
 //首页
 exports.indexData = function($){
   let ListHtml = []
@@ -100,7 +99,7 @@ exports.searchData = function($){
 }
 
 //简介和目录
-exports.briefData = function($){
+exports.briefData = function($,catlog){
   
   let blockImg = $('.block').find('.block_img2 img')
   let blockTxtP = $('.block').find('.block_txt2 p')
@@ -122,41 +121,43 @@ exports.briefData = function($){
     info:$('.margin_right').find('a').text(),
   }
 
-  let chapter = $('.chapter').eq(1)
-  let chapterArr =[]
-  chapter.find('li').each(function(index,item){
-    let alink = $(item).find('a')
-    let li = {
-      name:alink.text(),
-      src:'/pages/look/index?id='+$(alink).attr('href').substr(6),
-    }
-    chapterArr.push(li)
-  })
+  // let chapter = $('.chapter').eq(1)
+  // let chapterArr =[]
+  // chapter.find('li').each(function(index,item){
+  //   let alink = $(item).find('a')
+  //   let li = {
+  //     name:alink.text(),
+  //     src:'/pages/look/index?id='+$(alink).attr('href').substr(6),
+  //   }
+  //   chapterArr.push(li)
+  // })
 
-  let middle = $('.listpage span[class=middle]')
-  let middleArr = []
-  middle.find('select option').each(function(index,item){
-    let option = {
-      value:$(item).text(),
-      src: '/pages/brief/index?id='+$(item).attr('value').substr(6)
+  // let middle = $('.listpage span[class=middle]')
+  // let middleArr = []
+  // middle.find('select option').each(function(index,item){
+  //   let option = {
+  //     value:$(item).text(),
+  //     src: '/pages/brief/index?id='+$(item).attr('value').substr(6)
+  //   }
+  //   middleArr.push(option)
+  // })
+  let chapterArr = Catlog.resolveCatlog($)
+  let middleArr = Catlog.getMid($)
+  let initCatlog = Catlog.currentCatlog(middleArr,catlog)
+  if(initCatlog === 'err'){
+    return {
+      code: 500
     }
-    middleArr.push(option)
-  })
-  // let leftId = $('.listpage span[class=left]').find('a').attr('href')
-  // let rightId = $('.listpage span[class=right]').find('a').attr('href')
-  // let left =  leftId ? 'pages/brief/index?id='+ leftId.substr(6) : 'pages/brief/index'
-  // let right = '/pages/brief/index?id='+rightId.substr(6)
+  }  
   return {
     "b": brief,
     "i": intro_info,
     "m": margin_right,
     "c": chapterArr,
-    "l": {
-      // left,
-      middleArr,
-      // right,
-    }
+    "middleArr": middleArr,
+    "initCatlog":initCatlog
   }
+
 }
 
 
@@ -172,11 +173,12 @@ exports.contentData = function($){
   nrPage.each(function(index,item){
     let alink = $(item).find('a')
     let href = alink.attr('href')
+    let hrefArr = href.split('/')
     let src
-    if(index === 1){
-        src = '/pages/brief/index?id='+href.substr(6)
+    if(hrefArr[hrefArr.length-1] === ''){
+      src = '/pages/brief/index?id='+href.substr(6)
     }else{
-      src = '/pages/look/index?id='+href.substr(6)
+      src = href.substr(6)
     }
     let obj = {
       text:alink.text(),
@@ -198,6 +200,16 @@ exports.contentData = function($){
     nrArr
   }
 } 
+
+
+
+//目录
+exports.briefCatlog = function($){
+  let chapterArr = Catlog.resolveCatlog($)
+  return {
+    chapterArr
+  }
+}
 
 
 

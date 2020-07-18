@@ -6,7 +6,7 @@ const cheerio = require('cheerio')
 
 
 
-const { indexData, searchData, briefData, contentData } = require('../../control')
+const { indexData, searchData, briefData, contentData, briefCatlog } = require('../../control')
 const url = "https://m.biquge.com.cn"
 
 router.get('/da', async (ctx, next)=>{
@@ -46,17 +46,17 @@ router.get('/search', async(ctx, next)=>{
 let contorlBrief = async (ctx, next) => {
   let { bookId ,catlog } = ctx.params
   let html
-  if(catlog !== false){
+  if(catlog){
     html = await spider(`${url}/book/${bookId}/${catlog}`)
   }else{
     html = await spider(`${url}/book/${bookId}/`)
   }
   let $ = cheerio.load(html)
-  let body = briefData($)
+  let body = briefData($, catlog)
 
   // chapter.attr('style','display:block')
 
-  // let info = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/index.html'))
+  let info = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/index.html'))
   ctx.body = body 
 
 }
@@ -93,5 +93,20 @@ router.get('/book/:bookId', isCatlogOrBrief)
 
 //目录和内容
 router.get('/book/:bookId/:catlog', isCatlogOrBrief)
+
+
+router.get('/catlog/:bookId/:catlog',async (ctx,next)=>{
+  let { bookId ,catlog } = ctx.params
+  let html
+  if(catlog){
+    html = await spider(`${url}/book/${bookId}/${catlog}`)
+  }else{
+    html = await spider(`${url}/book/${bookId}/`)
+  }
+  let $ = cheerio.load(html)
+  let body = briefCatlog($)
+  let info = await writeFileFn(html, path.join(global.dirName + '/public/txt/a/index.html'))
+  ctx.body = body 
+})
 
 module.exports = router

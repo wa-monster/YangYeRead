@@ -29,8 +29,8 @@
 		<view class="catlog" v-if="isLoad">
 			<!-- <view class="left"><navigator :hover-stay-time="50" :url="l.left">上一页</navigator></view> -->
 			<xfl-select 
-				:list="l.middleArr" 
-				:initValue="l.middleArr[0].value" 
+				:list="midArr" 
+				:initValue="midArr[initC].value" 
 				:clearable="false"
 				class="middle" 
 				@change="changeSel" >
@@ -60,8 +60,9 @@
 				},
 				c:'',//章节
 				i:'',//简介
-				l:'',//分页
+				midArr:'',//分页
 				m:'',//按钮
+				initC:'',
 				sectionValue:'',
 				isLoad:false,
 			}
@@ -89,26 +90,40 @@
 						url:`${this.$baseUrl}/book/${this.id}`,
 						method:"get",
 					}).then(res=>{
-						console.log(res.data)
+						// console.log(res.data)
 						this.b = res.data.b,
 						this.c = res.data.c,
 						this.i = res.data.i,
-						this.l = res.data.l,
+						this.midArr = res.data.middleArr,
 						this.m = res.data.m
+						this.initC = res.data.initCatlog
 						this.isLoad = true
 						
 					}).catch(err=>{
+						uni.showToast({
+						    title: '请求出错',
+						    duration: 2000
+						});
 						throw err
 					})
 				})
 
 			},
 			changeSel(e){
-				console.log(e)
 				if(e.newVal !== e.oldVal){
-					uni.navigateTo({
-						url:e.orignItem.src
+					return new Promise((resolve,reject)=>{
+						this.$xhr({
+							url:`${this.$baseUrl}${e.orignItem.src}`,
+							method:"get",
+						}).then(res=>{
+							this.c =res.data.chapterArr
+						}).catch(err=>{
+							throw err
+						})
 					})
+					// uni.navigateTo({
+					// 	url:e.orignItem.src
+					// })
 				}
 			}
 		}

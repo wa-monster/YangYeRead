@@ -6,7 +6,8 @@
 		<view class="title" id="nr_title">{{title}}</view>
 		<view class="btn">
 			<view class="span" v-for="(item,index) in preAndNext" :key="index">
-				<navigator :hover-stay-time="50" class="a" :url="item.src">{{item.text}}</navigator>
+				<navigator v-if="index === 1" :hover-stay-time="50" class="a" :url="item.src">{{item.text}}</navigator>
+				<text class="a" v-else  @click="getLook(item.src)">{{item.text}}</text>
 			</view>
 		</view>
 		<view id="nr" class="content" v-html="contentData">
@@ -15,7 +16,8 @@
 		</view>
 		<view  class="btn">
 			<view class="span" v-for="(item,index) in preAndNext" :key="index">
-				<navigator :hover-stay-time="50" class="a" :url="item.src">{{item.text}}</navigator>
+				<navigator v-if="index === 1" :hover-stay-time="50" class="a" :url="item.src">{{item.text}}</navigator>
+				<text class="a" v-else  @click="getLook(item.src)">{{item.text}}</text>
 			</view>
 		</view>
 		这里是杨也的小说app
@@ -27,10 +29,20 @@
 		data(){
 			return {
 				id:'',
-				contentData:'',
-				name:'',
-				preAndNext:'',
-				title:''
+				contentData:'加载中',
+				name:'加载中',
+				preAndNext:[
+					{
+						text:'加载中'
+					},
+					{
+						text:'加载中'
+					},
+					{
+						text:'加载中'
+					}
+				],
+				title:'加载中'
 			}
 		},
 		onLoad(option){
@@ -45,7 +57,7 @@
 						method:"get",
 					}).then(res=>{
 						let data =res.data
-						console.log(data)
+						// console.log(data)
 						// let briefData = '<div class="block">' + res.data.b + '</div>' 
 						
 						this.contentData = data.nrArr
@@ -54,9 +66,29 @@
 						this.name = data.name
 						// this.ddd = res.data.l
 					}).catch(err=>{
+						
+						uni.showToast({
+						    title: '请求出错',
+						    duration: 2000
+						});
 						throw err
 					})
 				})
+			},
+			getLook(src){
+				if(src.indexOf('/pages/brief/index?id=') !== -1){
+					uni.navigateTo({
+						url:src,
+					})
+					return 
+				}
+				this.id = src;
+				this.contentData = '加载中'
+				uni.pageScrollTo({
+					scrollTop: 0,
+					duration: 0
+				});
+				this.loadData();
 			}
 		}
 		
@@ -104,6 +136,7 @@
 		}
 		.content{
 			padding: 1rem;
+			min-height:90vh;
 			.content_text{
 				display: block;
 				margin-bottom: 10px;

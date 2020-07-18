@@ -31,9 +31,15 @@
 				"navigationBarTitleText": "内容",
 				 "app-plus": {"titleNView": false} 
 			}
-		}
-		
-	],
+		},
+		{
+            "path" : "pages/error/index",
+            "style": {
+            	"navigationBarTitleText": "错误",
+            	 "app-plus": {"titleNView": false} 
+            }
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "内容",
